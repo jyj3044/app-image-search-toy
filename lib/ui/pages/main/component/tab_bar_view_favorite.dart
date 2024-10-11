@@ -33,7 +33,10 @@ class TabBarViewFavorite extends StatelessWidget {
                 itemCount: data.length,
                 itemBuilder: (context, index) {
                   final url = data[index];
-                  return InkWell(onTap: () => clickPageView(url), child: SearchImage(url: url));
+                  return SearchImage(
+                    url: url,
+                    controller: controller,
+                  );
                 },
                 physics: const ClampingScrollPhysics(),
               );
@@ -42,12 +45,5 @@ class TabBarViewFavorite extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  /// 포커스 제거 & 이미지 상세 이동
-  void clickPageView(String url) {
-    try {
-      Get.toNamed(ImageDetailView.routerName, arguments: url);
-    } catch (_) {}
   }
 }

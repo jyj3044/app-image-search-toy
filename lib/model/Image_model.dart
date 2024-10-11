@@ -1,5 +1,5 @@
-import 'package:app_image_search_toy/data/model/meta.dart';
-import 'package:app_image_search_toy/data/model/response_model.dart';
+import 'package:app_image_search_toy/model/meta.dart';
+import 'package:app_image_search_toy/model/response_model.dart';
 
 class ImageModel extends ResponseModel<ImageDocument> {
   ImageModel({required super.meta, required super.documents});

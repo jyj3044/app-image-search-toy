@@ -1,6 +1,7 @@
 import 'package:app_image_search_toy/core/base_view_model.dart';
-import 'package:app_image_search_toy/core/hive/key.dart';
-import 'package:app_image_search_toy/repository/search_image_repository.dart';
+import 'package:app_image_search_toy/repository/local/hive/favorite_box.dart';
+import 'package:app_image_search_toy/repository/remote/search_image_repository.dart';
+import 'package:app_image_search_toy/ui/pages/image_detail/image_detail_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -23,7 +24,7 @@ class MainViewModel extends BaseViewModel with GetTickerProviderStateMixin {
   // favorite
   final favoriteScrollController = PageController();
   final favoriteDataList = <String>[].obs;
-  final Box<String> favoriteBox = Hive.box<String>(HiveBoxName.favorite);
+  final Box<String> favoriteBox = FavoriteBox.box();
 
   int searchPage = 1;
   int searchSize = 10;
@@ -48,6 +49,7 @@ class MainViewModel extends BaseViewModel with GetTickerProviderStateMixin {
   @override
   void onInit() {
     super.onInit();
+
     tabController = TabController(length: 2, vsync: this);
   }
 
@@ -99,11 +101,19 @@ class MainViewModel extends BaseViewModel with GetTickerProviderStateMixin {
       return;
     }
 
+    if (searchFocusNode.hasFocus) {
+      searchFocusNode.unfocus();
+    }
+
     searchDataList.clear();
     searchPage = 1;
     searchText.value = searchTextController.text;
 
     final response = await SearchImageRepository.searchImage(searchText.value, page: searchPage);
+    if (response.meta.totalCount == 0) {
+      Fluttertoast.showToast(msg: "검색 결과가 없습니다.");
+      return;
+    }
     searchDataList.addAll(response.documents.map((e) => e.imageUrl).toList());
   }
 
@@ -116,11 +126,34 @@ class MainViewModel extends BaseViewModel with GetTickerProviderStateMixin {
       searchDataList.addAll(response.documents.map((e) => e.imageUrl).toList());
     }
   }
+
+  /// 즐겨찾기 변경
+  void changeFavorite(String url) async {
+    final box = await FavoriteBox.open();
+
+    if (box.containsKey(url)) {
+      box.delete(url);
+    } else {
+      box.put(url, url);
+    }
+  }
+
+  /// 이미지 상세로 이동
+  void moveImageDetail(String url) {
+    try {
+      if (searchFocusNode.hasFocus) {
+        searchFocusNode.unfocus();
+      } else {
+        Get.toNamed(ImageDetailView.routerName, arguments: url);
+      }
+    } catch (_) {}
+  }
 }
 
 class MainBindings extends Bindings {
   @override
   void dependencies() {
+    FavoriteBox.open();
     Get.lazyPut<MainViewModel>(() => MainViewModel());
   }
 }

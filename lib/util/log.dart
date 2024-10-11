@@ -7,7 +7,11 @@ import 'package:logger/logger.dart';
 class _ConsoleOutput extends LogOutput {
   @override
   void output(OutputEvent event) {
-    event.lines.forEach(logDev.log);
+    if (event.level == Level.debug) {
+      event.lines.forEach(logDev.log);
+    } else {
+      event.lines.forEach(print);
+    }
   }
 }
 
@@ -16,11 +20,19 @@ abstract class Log {
     output: _ConsoleOutput(),
     printer: PrettyPrinter(
       excludeBox: {
-        // Level.trace: true,
-        Level.debug: true,
-        // Level.info: true,
-        // Level.warning: true,
-        // Level.fatal: false,
+        Level.trace: false,
+        Level.debug: false,
+        Level.info: false,
+        Level.warning: false,
+        Level.fatal: false,
+      },
+      levelColors: {
+        // Level.verbose: AnsiColor.fg(AnsiColor.grey(0)),
+        Level.debug: const AnsiColor.none(),
+        // Level.info: const AnsiColor.none(),
+        // Level.warning: const AnsiColor.none(),
+        // Level.error: const AnsiColor.none(),
+        // Level.wtf: const AnsiColor.none(),
       },
       methodCount: 0,
       errorMethodCount: 15,
@@ -31,31 +43,31 @@ abstract class Log {
     ),
   );
 
-  static v(String str, {String? tag}) {
+  static v(String? str, {String? tag}) {
     _log(str, Level.verbose, tag: tag);
   }
 
-  static d(String str, {String? tag}) {
+  static d(String? str, {String? tag}) {
     _log(str, Level.debug, tag: tag);
   }
 
-  static i(String str, {String? tag}) {
+  static i(String? str, {String? tag}) {
     _log(str, Level.info, tag: tag);
   }
 
-  static w(String str, {String? tag, Object? error, StackTrace? stackTrace}) {
+  static w(String? str, {String? tag, Object? error, StackTrace? stackTrace}) {
     _log(str, Level.warning, tag: tag, error: error, stacktrace: stackTrace);
   }
 
-  static e(String str, {String? tag, Object? error, StackTrace? stackTrace}) {
+  static e(String? str, {String? tag, Object? error, StackTrace? stackTrace}) {
     _log(str, Level.error, tag: tag, error: error, stacktrace: stackTrace);
   }
 
-  static tcp(String str, {String? tag}) {
+  static tcp(String? str, {String? tag}) {
     _log(str, Level.verbose, tag: tag);
   }
 
-  static _log(String str, Level level, {String? tag, Object? error, StackTrace? stacktrace}) {
+  static _log(String? str, Level level, {String? tag, Object? error, StackTrace? stacktrace}) {
     if (tag != null && tag.isNotEmpty) tag = " [$tag]";
     String message = "[${DateTime.now()}]${tag ?? ''} $str";
 

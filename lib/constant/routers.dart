@@ -24,7 +24,9 @@ abstract class Routers {
     GetPage(
       name: ImageDetailView.routerName,
       page: () => const ImageDetailView(),
-      transition: Transition.cupertino,
+      transition: Transition.fadeIn,
+      fullscreenDialog: true,
+      transitionDuration: const Duration(milliseconds: 300),
       binding: ImageDetailBindings(),
     ),
   ];

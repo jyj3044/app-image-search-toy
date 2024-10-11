@@ -1,5 +1,3 @@
-import 'package:app_image_search_toy/core/log.dart';
-import 'package:app_image_search_toy/ui/pages/image_detail/image_detail_view.dart';
 import 'package:app_image_search_toy/ui/pages/main/component/search_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -17,6 +15,7 @@ class TabBarViewSearch extends StatelessWidget {
       color: Colors.white,
       child: Column(
         children: [
+          /// 검색박스
           TextFormField(
             focusNode: controller.searchFocusNode,
             controller: controller.searchTextController,
@@ -72,39 +71,31 @@ class TabBarViewSearch extends StatelessWidget {
             style: const TextStyle(color: Colors.black),
           ),
           const Divider(height: 1, color: Colors.black12),
+
+          /// 이미지 페이지뷰
           Expanded(
-            child: _buildList(),
+            child: Obx(() {
+              final data = controller.searchDataList;
+              if (data.isEmpty) return Container();
+
+              return PageView.builder(
+                controller: controller.searchPageController,
+                itemCount: data.length,
+                itemBuilder: (context, index) {
+                  final url = data[index];
+                  return SearchImage(
+                    url: url,
+                    controller: controller,
+                  );
+                },
+                physics: const ClampingScrollPhysics(),
+              );
+            }),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildList() {
-    return Obx(() {
-      final data = controller.searchDataList;
-      if (data.isEmpty) return Container();
-
-      return PageView.builder(
-        controller: controller.searchPageController,
-        itemCount: data.length,
-        itemBuilder: (context, index) {
-          final url = data[index];
-          return InkWell(onTap: () => clickPageView(url), child: SearchImage(url: url));
-        },
-        physics: const ClampingScrollPhysics(),
-      );
-    });
-  }
-
   /// 포커스 제거 & 이미지 상세 이동
-  void clickPageView(String url) {
-    try {
-      if (controller.searchFocusNode.hasFocus) {
-        controller.searchFocusNode.unfocus();
-      } else {
-        Get.toNamed(ImageDetailView.routerName, arguments: url);
-      }
-    } catch (_) {}
-  }
 }

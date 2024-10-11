@@ -1,5 +1,5 @@
-import 'package:app_image_search_toy/core/hive/key.dart';
-import 'package:app_image_search_toy/core/log.dart';
+import 'package:app_image_search_toy/util/log.dart';
+import 'package:app_image_search_toy/repository/local/hive/favorite_box.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 abstract class HiveManager {
@@ -16,7 +16,7 @@ abstract class HiveManager {
 
     // Key Value 박스 오픈
     {
-      futureTask.add(openBox<String>(HiveBoxName.favorite));
+      futureTask.add(FavoriteBox.open());
 
       await Future.wait(futureTask);
       futureTask.clear();
