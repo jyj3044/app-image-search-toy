@@ -1,4 +1,5 @@
-import 'package:app_image_search_toy/repository/local/hive/favorite_box.dart';
+import 'package:app_image_search_toy/model/image_document.dart';
+
 import 'package:app_image_search_toy/ui/component/error_image.dart';
 import 'package:app_image_search_toy/ui/pages/main/main_view_model.dart';
 import 'package:app_image_search_toy/util/log.dart';
@@ -7,22 +8,23 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 class SearchImage extends StatelessWidget {
-  final String url;
+  final ImageDocument imageDocument;
   final MainViewModel controller;
 
-  const SearchImage({super.key, required this.url, required this.controller});
+  const SearchImage({super.key, required this.imageDocument, required this.controller});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => controller.moveImageDetail(url),
+      onTap: () => controller.moveImageDetail(imageDocument),
       child: Stack(
         fit: StackFit.expand,
         children: [
+          /// 이미지
           Hero(
-            tag: url,
+            tag: imageDocument,
             child: CachedNetworkImage(
-              imageUrl: url,
+              imageUrl: imageDocument.imageUrl,
               fit: BoxFit.fitWidth,
               placeholder: (context, url) => const Center(
                 child: SizedBox(
@@ -41,16 +43,19 @@ class SearchImage extends StatelessWidget {
               // fadeInDuration: const Duration(milliseconds: 300),
             ),
           ),
+
+          /// 즐겨찾기 버튼
           ValueListenableBuilder(
-            valueListenable: FavoriteBox.box().listenable(keys: [url]),
+            valueListenable: controller.favoriteBox.listenable(keys: [imageDocument.uniqueKey]),
             builder: (context, box, widget) {
-              final isFavorite = box.containsKey(url);
+              final isFavorite = box.containsKey(imageDocument.uniqueKey);
+
               return Padding(
                 padding: const EdgeInsets.all(40.0),
                 child: Align(
                   alignment: Alignment.bottomRight,
                   child: InkWell(
-                    onTap: () => controller.changeFavorite(url),
+                    onTap: () => controller.changeFavorite(imageDocument),
                     child: Icon(
                       Icons.favorite,
                       color: isFavorite ? Colors.redAccent : Colors.grey,

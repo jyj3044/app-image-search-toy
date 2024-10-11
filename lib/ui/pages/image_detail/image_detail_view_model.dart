@@ -1,10 +1,11 @@
 import 'package:app_image_search_toy/core/base_view_model.dart';
+import 'package:app_image_search_toy/model/image_document.dart';
 import 'package:app_image_search_toy/repository/local/hive/favorite_box.dart';
 import 'package:get/get.dart';
 
 class ImageDetailViewModel extends BaseViewModel {
   final favoriteBox = FavoriteBox.box();
-  final url = Get.arguments;
+  final imageDocument = Get.arguments as ImageDocument;
   final isViewBack = 1.0.obs;
 
   @override
@@ -34,10 +35,10 @@ class ImageDetailViewModel extends BaseViewModel {
   void changeFavorite() async {
     final box = await FavoriteBox.open();
 
-    if (box.containsKey(url)) {
-      box.delete(url);
+    if (box.containsKey(imageDocument.uniqueKey)) {
+      box.delete(imageDocument.uniqueKey);
     } else {
-      box.put(url, url);
+      box.put(imageDocument.uniqueKey, imageDocument);
     }
   }
 }

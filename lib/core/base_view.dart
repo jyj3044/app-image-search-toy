@@ -1,4 +1,3 @@
-import 'package:app_image_search_toy/constant/color.dart';
 import 'package:app_image_search_toy/core/base_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/src/simple/get_view.dart';
@@ -21,12 +20,9 @@ abstract class BaseView<VM extends BaseViewModel> extends GetView<VM> {
         appBar: appBar(ctx),
         body: body(ctx),
         drawer: drawer(),
-        backgroundColor: bgColor,
       ),
     );
   }
 
   Widget? drawer() => null;
-
-  Color? get bgColor => AppColor.bgPrimary;
 }

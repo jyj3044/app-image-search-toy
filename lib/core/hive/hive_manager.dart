@@ -1,3 +1,4 @@
+import 'package:app_image_search_toy/model/image_document.dart';
 import 'package:app_image_search_toy/util/log.dart';
 import 'package:app_image_search_toy/repository/local/hive/favorite_box.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -8,7 +9,7 @@ abstract class HiveManager {
 
     // 어댑터 초기화
     {
-      // futureTask.add(_initAdapter(HiveObjectId.ORDER, HiveBoxName.ORDER, OrderAdapter()));
+      futureTask.add(_initAdapter(FavoriteBox.typeId, FavoriteBox.name, ImageDocumentAdapter()));
 
       await Future.wait(futureTask);
       futureTask.clear();

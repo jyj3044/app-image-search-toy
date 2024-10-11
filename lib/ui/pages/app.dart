@@ -9,33 +9,29 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'Flutter Demo',
+      title: 'Image Favorite Toy',
       initialRoute: Routers.initialRoute,
       getPages: Routers.routers,
       theme: ThemeData(
         useMaterial3: true,
         textTheme: Theme.of(context).textTheme.apply(
-          bodyColor: Colors.black,
-        ),
+              bodyColor: Colors.black,
+            ),
         textSelectionTheme: const TextSelectionThemeData(
           cursorColor: Colors.black,
         ),
         colorScheme: ColorScheme.fromSeed(
+          onSurface: AppColor.bgPrimary, // 앱 배경
+          surfaceContainerHighest: AppColor.bgPrimary, // 앱 배경
           seedColor: AppColor.bgPrimary,
-          brightness: Brightness.dark,
+          brightness: Brightness.light, // 밝기
         ),
         inputDecorationTheme: Theme.of(context).inputDecorationTheme.copyWith(
-          border: const UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.black),
-          ),
-          focusedBorder: const UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.black),
-          ),
-          enabledBorder: const UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.black),
-          ),
-          labelStyle: const TextStyle(color: Colors.black),
-        ),
+              border: const OutlineInputBorder(borderSide: BorderSide.none),
+              enabledBorder: const OutlineInputBorder(borderSide: BorderSide.none),
+              focusedBorder: const OutlineInputBorder(borderSide: BorderSide.none),
+              labelStyle: const TextStyle(color: Colors.black),
+            ),
       ),
     );
   }

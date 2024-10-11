@@ -21,22 +21,22 @@ class ImageDetailView extends BaseView<ImageDetailViewModel> {
     return Container(
       color: Colors.black,
       child: Stack(
-        fit: StackFit.expand,
+        alignment: Alignment.topCenter,
         children: [
           InkWell(
             onTap: controller.clickImage,
             child: PhotoView(
-              imageProvider: CachedNetworkImageProvider(controller.url),
-              heroAttributes: PhotoViewHeroAttributes(tag: controller.url),
+              imageProvider: CachedNetworkImageProvider(controller.imageDocument.imageUrl),
+              heroAttributes: PhotoViewHeroAttributes(tag: controller.imageDocument),
               errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) {
                 return const ErrorImage(color: Colors.white);
               },
             ),
           ),
           ValueListenableBuilder(
-            valueListenable: controller.favoriteBox.listenable(keys: [controller.url]),
+            valueListenable: controller.favoriteBox.listenable(keys: [controller.imageDocument.uniqueKey]),
             builder: (context, box, widget) {
-              final isFavorite = box.containsKey(controller.url);
+              final isFavorite = box.containsKey(controller.imageDocument.uniqueKey);
               return Padding(
                 padding: const EdgeInsets.all(40.0),
                 child: Align(
@@ -54,23 +54,39 @@ class ImageDetailView extends BaseView<ImageDetailViewModel> {
             },
           ),
           Obx(() {
-            return AnimatedOpacity(
-              opacity: controller.isViewBack.value,
-              duration: const Duration(milliseconds: 100),
-              child: Align(
-                alignment: Alignment.topCenter,
+            return SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: AnimatedOpacity(
+                opacity: controller.isViewBack.value,
+                duration: const Duration(milliseconds: 100),
                 child: InkWell(
                   onTap: controller.moveBack,
                   child: Container(
+                    padding: const EdgeInsets.only(top: 9),
                     color: Colors.white.withOpacity(0.09),
-                    width: double.infinity,
-                    padding: const EdgeInsets.only(left: 5),
-                    height: 50,
-                    alignment: Alignment.centerLeft,
-                    child: const Icon(
-                      Icons.arrow_back_ios_rounded,
-                      color: Colors.grey,
-                      size: 32,
+                    alignment: Alignment.center,
+                    child: Stack(
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.only(left: 5),
+                          child: Icon(
+                            Icons.arrow_back_ios_rounded,
+                            color: Colors.grey,
+                            size: 32,
+                          ),
+                        ),
+                        Container(
+                          alignment: Alignment.topCenter,
+                          child: Text(
+                            controller.imageDocument.displaySitename,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -80,73 +96,5 @@ class ImageDetailView extends BaseView<ImageDetailViewModel> {
         ],
       ),
     );
-    // return Obx(() {
-    //   final url = controller.url.value;
-    //   if (url.isEmpty) return const SizedBox();
-    //
-    //   return Container(
-    //     color: Colors.black,
-    //     child: Stack(
-    //       fit: StackFit.expand,
-    //       children: [
-    //         InkWell(
-    //           onTap: controller.clickImage,
-    //           child: PhotoView(
-    //             // imageProvider: NetworkImage(url),
-    //             imageProvider: CachedNetworkImageProvider(url),
-    //             heroAttributes: PhotoViewHeroAttributes(tag: url),
-    //             errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) {
-    //               return const ErrorImage(color: Colors.white);
-    //             },
-    //           ),
-    //         ),
-    //         ValueListenableBuilder(
-    //           valueListenable: controller.favoriteBox.listenable(keys: [url]),
-    //           builder: (context, box, widget) {
-    //             final isFavorite = box.containsKey(url);
-    //             return Padding(
-    //               padding: const EdgeInsets.all(40.0),
-    //               child: Align(
-    //                 alignment: Alignment.bottomRight,
-    //                 child: InkWell(
-    //                   onTap: controller.changeFavorite,
-    //                   child: Icon(
-    //                     Icons.favorite,
-    //                     color: isFavorite ? Colors.redAccent : Colors.grey,
-    //                     size: 65,
-    //                   ),
-    //                 ),
-    //               ),
-    //             );
-    //           },
-    //         ),
-    //         Obx(() {
-    //           return AnimatedOpacity(
-    //             opacity: controller.isViewBack.value,
-    //             duration: const Duration(milliseconds: 100),
-    //             child: Align(
-    //               alignment: Alignment.topCenter,
-    //               child: InkWell(
-    //                 onTap: controller.moveBack,
-    //                 child: Container(
-    //                   color: Colors.white.withOpacity(0.09),
-    //                   width: double.infinity,
-    //                   padding: const EdgeInsets.only(left: 5),
-    //                   height: 50,
-    //                   alignment: Alignment.centerLeft,
-    //                   child: const Icon(
-    //                     Icons.arrow_back_ios_rounded,
-    //                     color: Colors.grey,
-    //                     size: 32,
-    //                   ),
-    //                 ),
-    //               ),
-    //             ),
-    //           );
-    //         })
-    //       ],
-    //     ),
-    //   );
-    // });
   }
 }

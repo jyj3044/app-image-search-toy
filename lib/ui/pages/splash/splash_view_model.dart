@@ -1,5 +1,6 @@
 import 'package:app_image_search_toy/core/base_view_model.dart';
 import 'package:app_image_search_toy/core/hive/hive_manager.dart';
+import 'package:app_image_search_toy/repository/local/hive/favorite_box.dart';
 import 'package:app_image_search_toy/util/log.dart';
 import 'package:app_image_search_toy/ui/pages/main/main_view.dart';
 import 'package:get/get.dart';
@@ -18,7 +19,6 @@ class SplashViewModel extends BaseViewModel {
       await Hive.initFlutter();
       await HiveManager.initHive();
 
-      // Hive.box(HiveBoxName.favorite).deleteFromDisk();
     } catch (e, s) {
       Log.e("initHive", error: e, stackTrace: s);
     }

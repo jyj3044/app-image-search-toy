@@ -1,9 +1,7 @@
+import 'package:app_image_search_toy/constant/color.dart';
 import 'package:app_image_search_toy/core/base_view.dart';
 import 'package:app_image_search_toy/ui/pages/main/component/tab_bar_view_favorite.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:get/get.dart';
 
 import 'component/tab_bar_view_search.dart';
 import 'main_view_model.dart';
@@ -15,39 +13,31 @@ class MainView extends BaseView<MainViewModel> {
 
   @override
   PreferredSizeWidget? appBar(BuildContext ctx) => PreferredSize(
-        preferredSize: const Size.fromHeight(300),
-        child: Obx(() {
-          return AnimatedCrossFade(
-            firstChild: TabBar(
-              indicatorWeight: 0.1,
-              indicatorColor: Colors.transparent,
-              labelColor: Colors.redAccent,
-              dividerHeight: 0,
-              controller: controller.tabController,
-              tabs: const [
-                Tab(
-                  icon: Icon(Icons.search),
-                  text: "Search",
-                ),
-                Tab(
-                  icon: Icon(Icons.favorite),
-                  text: "Favorite",
-                )
-              ],
-              overlayColor: WidgetStateProperty.all(Colors.transparent),
-              onTap: controller.onTap,
-            ),
-            secondChild: const SizedBox.shrink(),
-            crossFadeState: controller.scrollDirection.value == ScrollDirection.forward ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-            duration: const Duration(milliseconds: 100),
-          );
-        }),
-      );
+      preferredSize: const Size.fromHeight(300),
+      child: TabBar(
+        indicatorWeight: 0.1,
+        indicatorColor: Colors.transparent,
+        labelColor: Colors.redAccent,
+        dividerHeight: 0,
+        controller: controller.tabController,
+        tabs: const [
+          Tab(
+            icon: Icon(Icons.search),
+            text: "Search",
+          ),
+          Tab(
+            icon: Icon(Icons.favorite),
+            text: "Favorite",
+          )
+        ],
+        overlayColor: WidgetStateProperty.all(Colors.transparent),
+        onTap: controller.onTap,
+      ));
 
   @override
   Widget body(BuildContext ctx) {
     return Container(
-      color: CupertinoColors.systemGrey3,
+      color: AppColor.bgPrimary,
       child: Column(
         children: [
           Expanded(

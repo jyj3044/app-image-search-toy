@@ -1,4 +1,3 @@
-import 'package:app_image_search_toy/ui/pages/image_detail/image_detail_view.dart';
 import 'package:app_image_search_toy/ui/pages/main/component/search_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -34,7 +33,7 @@ class TabBarViewFavorite extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final url = data[index];
                   return SearchImage(
-                    url: url,
+                    imageDocument: url,
                     controller: controller,
                   );
                 },

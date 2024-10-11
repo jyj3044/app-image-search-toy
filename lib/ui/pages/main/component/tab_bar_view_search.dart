@@ -82,9 +82,9 @@ class TabBarViewSearch extends StatelessWidget {
                 controller: controller.searchPageController,
                 itemCount: data.length,
                 itemBuilder: (context, index) {
-                  final url = data[index];
+                  final imageDocument = data[index];
                   return SearchImage(
-                    url: url,
+                    imageDocument: imageDocument,
                     controller: controller,
                   );
                 },
